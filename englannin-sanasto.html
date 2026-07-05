@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Englannin sanasto — harjoitusohjelma</title>
+<style>
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#22301f; --muted:#6b7566;
+  --line:#dcdad2; --accent:#1d6e4e; --accent-soft:#e2f0e8;
+  --wrong:#a33030; --wrong-soft:#f8e7e7; --amber:#8a5a12; --amber-soft:#f6ecd9;
+  --radius:10px;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif; line-height:1.6;}
+.wrap{max-width:720px; margin:0 auto; padding:2rem 1.25rem 4rem;}
+header{border-bottom:3px double var(--line); padding-bottom:1.25rem; margin-bottom:1.5rem;}
+h1{font-size:1.6rem; font-weight:normal; margin:0 0 0.25rem;}
+.sub{font-family:Verdana,sans-serif; font-size:0.8rem; color:var(--muted); margin:0;}
+.row{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 1rem;}
+.row button{font-family:Verdana,sans-serif; font-size:0.75rem; padding:7px 14px;
+  border:1px solid var(--line); background:var(--card); color:var(--ink);
+  border-radius:20px; cursor:pointer;}
+.row button.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 1.5rem;}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:0.6rem 0.9rem;}
+.stat p{margin:0; font-family:Verdana,sans-serif;}
+.stat .l{font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted);}
+.stat .v{font-size:1.4rem;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:2rem 1.5rem; text-align:center; cursor:pointer; user-select:none; min-height:180px;
+  display:flex; flex-direction:column; justify-content:center;}
+.card .lang{font-family:Verdana,sans-serif; font-size:0.65rem; text-transform:uppercase;
+  letter-spacing:0.1em; color:var(--accent); margin:0 0 0.5rem;}
+.card .word{font-size:1.7rem; margin:0;}
+.card .hint{font-family:Verdana,sans-serif; font-size:0.7rem; color:var(--muted); margin:1rem 0 0;}
+.card .boxlabel{font-family:Verdana,sans-serif; font-size:0.65rem; margin:0.75rem 0 0;}
+.speak{margin:0.6rem auto 0; font-size:1.15rem; line-height:1; width:46px; height:46px;
+  border-radius:50%; border:1px solid var(--line); background:var(--bg); color:var(--ink);
+  cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
+.speak:hover{border-color:var(--accent); background:var(--accent-soft);}
+.speak:active{transform:scale(0.93);}
+.speak:disabled{opacity:0.35; cursor:default;}
+.judge{display:none; gap:10px; margin-top:1rem; justify-content:center;}
+.judge button{font-family:Verdana,sans-serif; font-size:0.85rem; padding:11px 22px;
+  border-radius:var(--radius); cursor:pointer; border:1px solid;}
+.knew{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
+.didnt{background:var(--wrong-soft); border-color:var(--wrong); color:var(--wrong);}
+.opts{display:none; flex-direction:column; gap:9px; margin-top:1rem;}
+.opts button{font-family:Georgia,serif; font-size:1rem; text-align:left; padding:11px 16px;
+  border:1px solid var(--line); background:var(--bg); color:var(--ink);
+  border-radius:var(--radius); cursor:pointer;}
+.opts button:hover:not(:disabled){border-color:var(--accent);}
+.opts button:disabled{cursor:default;}
+.opts button.correct{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
+.opts button.wrong{background:var(--wrong-soft); border-color:var(--wrong); color:var(--wrong);}
+.fb{display:none; margin-top:1rem; padding:0.9rem 1.1rem; border-radius:var(--radius);
+  font-size:0.95rem; border-left:4px solid; text-align:left;}
+.fb.ok{display:block; background:var(--accent-soft); border-color:var(--accent); color:#14523a;}
+.fb.no{display:block; background:var(--wrong-soft); border-color:var(--wrong); color:#7c2222;}
+.next{display:none; font-family:Verdana,sans-serif; font-size:0.8rem; padding:9px 18px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff;
+  border-radius:var(--radius); cursor:pointer; margin-top:1rem;}
+.reset{font-family:Verdana,sans-serif; font-size:0.8rem; padding:9px 18px;
+  border:1px solid var(--accent); background:transparent; color:var(--accent);
+  border-radius:var(--radius); cursor:pointer; margin-top:1.5rem; margin-right:8px;}
+.trans{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.1rem 1.25rem; margin:0 0 1.5rem;}
+.trans h2{font-size:1rem; font-weight:normal; margin:0 0 0.75rem;
+  font-family:Verdana,sans-serif; letter-spacing:0.02em;}
+.trans .inrow{display:flex; gap:8px; flex-wrap:wrap;}
+.trans input{flex:1; min-width:180px; font-family:Georgia,serif; font-size:1rem;
+  padding:9px 12px; border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--bg); color:var(--ink);}
+.trans select{font-family:Verdana,sans-serif; font-size:0.8rem; padding:9px 10px;
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--bg); color:var(--ink);}
+.trans .go{font-family:Verdana,sans-serif; font-size:0.8rem; padding:9px 18px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff;
+  border-radius:var(--radius); cursor:pointer;}
+.tres{display:none; margin-top:0.9rem; padding:0.8rem 1rem; border-radius:var(--radius);
+  border-left:4px solid var(--accent); background:var(--accent-soft); font-size:0.95rem;}
+.tres .src{font-family:Verdana,sans-serif; font-size:0.65rem; color:var(--muted);
+  margin:0.4rem 0 0;}
+.tres .addbtn{font-family:Verdana,sans-serif; font-size:0.75rem; padding:6px 12px;
+  border:1px solid var(--accent); background:transparent; color:var(--accent);
+  border-radius:var(--radius); cursor:pointer; margin-top:0.6rem;}
+.boxbar{display:flex; gap:6px; margin-top:1.5rem; font-family:Verdana,sans-serif; font-size:0.7rem;}
+.boxbar div{flex:1; text-align:center; padding:6px 4px; border-radius:6px; border:1px solid var(--line);}
+.b1{background:var(--wrong-soft); color:var(--wrong);}
+.b2{background:var(--amber-soft); color:var(--amber);}
+.b3{background:var(--accent-soft); color:var(--accent);}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Englannin sanasto</h1>
+  <p class="sub">Harjoitusohjelma · osa 12 kk kehittymisohjelmaa · oppiminen tallentuu selaimeen</p>
+</header>
+
+<div class="row" id="modes">
+  <button data-m="flash" class="active">Kortit</button>
+  <button data-m="quiz">Monivalinta</button>
+</div>
+<div class="row" id="cats"></div>
+<div class="row" id="dirs">
+  <button data-d="en" class="active">EN → FI</button>
+  <button data-d="fi">FI → EN</button>
+</div>
+<div class="row" id="speakrow">
+  <button id="autospeak" onclick="toggleAuto()">🔊 Automaattinen ääntäminen: pois</button>
+</div>
+
+<div class="trans">
+  <h2>Kääntäjä</h2>
+  <div class="inrow">
+    <input type="text" id="tin" placeholder="Kirjoita sana englanniksi tai suomeksi..." onkeydown="if(event.key==='Enter')translateWord()">
+    <select id="tdir">
+      <option value="auto">Tunnista kieli</option>
+      <option value="en|fi">EN → FI</option>
+      <option value="fi|en">FI → EN</option>
+    </select>
+    <button class="go" onclick="translateWord()">Käännä</button>
+  </div>
+  <div class="tres" id="tres"></div>
+</div>
+
+<div class="stats">
+  <div class="stat"><p class="l">Tämä istunto</p><p class="v" id="sess">0</p></div>
+  <div class="stat"><p class="l">Oikein</p><p class="v" id="score">0</p></div>
+  <div class="stat"><p class="l">Osattuja sanoja</p><p class="v" id="mastered">0</p></div>
+  <div class="stat"><p class="l">Sanoja yhteensä</p><p class="v" id="total">0</p></div>
+</div>
+
+<div class="card" id="card" onclick="flip()">
+  <p class="lang" id="lang"></p>
+  <p class="word" id="word"></p>
+  <button class="speak" id="speakBtn" onclick="event.stopPropagation(); speakCurrent();" title="Kuuntele englanniksi" aria-label="Kuuntele ääntäminen">🔊</button>
+  <p class="hint" id="hint">Napauta korttia nähdäksesi käännöksen</p>
+  <p class="boxlabel" id="boxlabel"></p>
+</div>
+
+<div class="judge" id="judge">
+  <button class="knew" onclick="judge(true)">Osasin ✓</button>
+  <button class="didnt" onclick="judge(false)">En osannut ✗</button>
+</div>
+
+<div class="opts" id="opts"></div>
+<div class="fb" id="fb"></div>
+<button class="next" id="nextBtn" onclick="nextCard()">Seuraava →</button>
+
+<div class="boxbar" title="Sanan taso nousee kun osaat sen, ja laskee kun et. Taso 3 = osattu.">
+  <div class="b1">Taso 1: <span id="c1">0</span></div>
+  <div class="b2">Taso 2: <span id="c2">0</span></div>
+  <div class="b3">Taso 3 (osattu): <span id="c3">0</span></div>
+</div>
+
+<button class="reset" onclick="resetProgress()">Nollaa oppimistilastot</button>
+<button class="reset" onclick="clearCustom()">Tyhjennä omat sanat</button>
+
+<script>
+const WORDS = [
+["yleinen","improve","parantaa"],
+["yleinen","achieve","saavuttaa"],
+["yleinen","decide","päättää"],
+["yleinen","although","vaikka"],
+["yleinen","therefore","siksi, sen vuoksi"],
+["yleinen","however","kuitenkin"],
+["yleinen","despite","huolimatta"],
+["yleinen","instead of","sen sijaan että"],
+["yleinen","available","saatavilla"],
+["yleinen","necessary","välttämätön"],
+["yleinen","efficient","tehokas"],
+["yleinen","reliable","luotettava"],
+["yleinen","accurate","tarkka"],
+["yleinen","approximately","noin, suunnilleen"],
+["yleinen","increase","kasvaa, lisätä"],
+["yleinen","decrease","vähentyä, vähentää"],
+["yleinen","compare","vertailla"],
+["yleinen","suggest","ehdottaa"],
+["yleinen","require","vaatia, edellyttää"],
+["yleinen","consider","harkita, ottaa huomioon"],
+["yleinen","confirm","vahvistaa"],
+["yleinen","postpone","lykätä, siirtää myöhemmäksi"],
+["yleinen","convenient","kätevä, sopiva"],
+["yleinen","sufficient","riittävä"],
+["yleinen","purpose","tarkoitus"],
+["sähkö","circuit breaker","johdonsuojakatkaisija"],
+["sähkö","residual current device (RCD)","vikavirtasuojakytkin"],
+["sähkö","arc fault detection device (AFDD)","valokaarivikasuoja"],
+["sähkö","distribution board","sähkökeskus, ryhmäkeskus"],
+["sähkö","main switchboard","pääkeskus"],
+["sähkö","voltage","jännite"],
+["sähkö","current","virta"],
+["sähkö","power","teho"],
+["sähkö","earthing / grounding","maadoitus"],
+["sähkö","fuse","sulake"],
+["sähkö","wiring","johdotus"],
+["sähkö","cable tray","kaapelihylly"],
+["sähkö","conduit","asennusputki"],
+["sähkö","riser diagram","nousujohtokaavio"],
+["sähkö","load management","kuormanhallinta"],
+["sähkö","charging station","latausasema"],
+["sähkö","power quality","sähkön laatu"],
+["sähkö","three-phase","kolmivaihe-"],
+["sähkö","ventilation","ilmanvaihto"],
+["sähkö","heat pump","lämpöpumppu"],
+["sähkö","district heating","kaukolämpö"],
+["sähkö","building automation","rakennusautomaatio"],
+["sähkö","fault","vika, häiriö"],
+["sähkö","measurement","mittaus"],
+["sähkö","commissioning","käyttöönotto"],
+["sähkö","maintenance","huolto, kunnossapito"],
+["sähkö","preventive maintenance","ennakkohuolto"],
+["sähkö","insulation","eristys"],
+["sähkö","enclosure","kotelo"],
+["sähkö","terminal","liitin"],
+["työ","quotation / offer","tarjous"],
+["työ","invoice","lasku"],
+["työ","procurement","hankinta"],
+["työ","agreement / contract","sopimus"],
+["työ","deadline","määräaika"],
+["työ","schedule","aikataulu"],
+["työ","estimate","kustannusarvio, arvio"],
+["työ","warranty","takuu"],
+["työ","subcontractor","aliurakoitsija"],
+["työ","construction site","työmaa"],
+["työ","client / customer","asiakas"],
+["työ","negotiate","neuvotella"],
+["työ","meeting minutes","kokousmuistio, pöytäkirja"],
+["työ","attachment","liite"],
+["työ","proposal","ehdotus, tarjousehdotus"],
+["työ","budget","budjetti"],
+["työ","cost-effective","kustannustehokas"],
+["työ","scope of work","työn laajuus"],
+["työ","delivery time","toimitusaika"],
+["työ","terms of payment","maksuehdot"],
+["työ","site visit","työmaakäynti, kohdekäynti"],
+["työ","key account manager","avainasiakaspäällikkö"],
+["työ","housing company","taloyhtiö, asunto-osakeyhtiö"],
+["työ","property manager","isännöitsijä"],
+["työ","tender","tarjouskilpailu"],
+["elektroniikka","sensor","anturi"],
+["elektroniikka","resistor","vastus"],
+["elektroniikka","capacitor","kondensaattori"],
+["elektroniikka","soldering","juottaminen"],
+["elektroniikka","soldering iron","juotoskolvi"],
+["elektroniikka","power supply","virtalähde"],
+["elektroniikka","microcontroller","mikro-ohjain"],
+["elektroniikka","firmware","laiteohjelmisto"],
+["elektroniikka","oscilloscope","oskilloskooppi"],
+["elektroniikka","multimeter","yleismittari"],
+["elektroniikka","wireless","langaton"],
+["elektroniikka","circuit board (PCB)","piirilevy"],
+["elektroniikka","breadboard","koekytkentälevy"],
+["elektroniikka","datasheet","datalehti"],
+["elektroniikka","troubleshooting","vianetsintä"],
+["elektroniikka","spare part","varaosa"],
+["elektroniikka","enclosure rating (IP)","kotelointiluokka"],
+["elektroniikka","current consumption","virrankulutus"],
+["elektroniikka","update / upgrade","päivitys / laitepäivitys"],
+["elektroniikka","measurement range","mittausalue"],
+["sähköposti","I am writing to inquire about...","Kirjoitan tiedustellakseni..."],
+["sähköposti","Please find attached...","Liitteenä on... / Ohessa..."],
+["sähköposti","With reference to your email...","Viitaten sähköpostiinne..."],
+["sähköposti","Could you please confirm...","Voisitteko vahvistaa..."],
+["sähköposti","I would appreciate it if you could...","Olisin kiitollinen, jos voisitte..."],
+["sähköposti","Thank you for your prompt reply","Kiitos nopeasta vastauksestanne"],
+["sähköposti","I apologize for the delay in responding","Pahoittelen viivästynyttä vastausta"],
+["sähköposti","As discussed in our meeting...","Kuten kokouksessamme sovimme..."],
+["sähköposti","Please let me know if you have any questions","Kerrottehan, jos teillä on kysyttävää"],
+["sähköposti","I look forward to hearing from you","Odotan vastaustanne"],
+["sähköposti","Could we schedule a meeting to discuss this?","Voisimmeko sopia tapaamisen tästä?"],
+["sähköposti","I am following up on my previous email","Palaan aiempaan sähköpostiini"],
+["sähköposti","Please do not hesitate to contact me","Otattehan rohkeasti yhteyttä"],
+["sähköposti","We regret to inform you that...","Joudumme valitettavasti ilmoittamaan, että..."],
+["sähköposti","We are pleased to inform you that...","Ilomme on ilmoittaa, että..."],
+["sähköposti","Further to our phone conversation...","Puhelinkeskusteluumme viitaten..."],
+["sähköposti","Please find our quotation enclosed","Ohessa tarjouksemme"],
+["sähköposti","The deadline for submission is...","Viimeinen jättöpäivä on..."],
+["sähköposti","Best regards / Kind regards","Ystävällisin terveisin"],
+["sähköposti","on behalf of","jonkun puolesta (esim. yrityksen)"],
+["neuvottelu","Let's get down to business","Mennään asiaan"],
+["neuvottelu","What did you have in mind?","Mitä teillä oli mielessä?"],
+["neuvottelu","We could offer you...","Voisimme tarjota teille..."],
+["neuvottelu","That's not quite what we expected","Tämä ei aivan vastaa odotuksiamme"],
+["neuvottelu","Could you be more flexible on the price?","Voisitteko joustaa hinnassa?"],
+["neuvottelu","Let me get back to you on that","Palaan tähän asiaan myöhemmin"],
+["neuvottelu","We're on the same page","Olemme samoilla linjoilla"],
+["neuvottelu","to reach an agreement","päästä sopimukseen"],
+["neuvottelu","counteroffer","vastatarjous"],
+["neuvottelu","to compromise","tehdä kompromissi, joustaa"],
+["neuvottelu","terms and conditions","sopimusehdot"],
+["neuvottelu","a win-win situation","molempia hyödyttävä tilanne"],
+["neuvottelu","That works for us","Tämä sopii meille"],
+["neuvottelu","I'm afraid we can't accept that","Valitettavasti emme voi hyväksyä tätä"],
+["neuvottelu","What if we...?","Entä jos me...?"],
+["neuvottelu","to meet halfway","tulla puolitiehen vastaan"],
+["neuvottelu","subject to approval","hyväksynnän varainen, edellyttäen hyväksyntää"],
+["neuvottelu","non-negotiable","ei neuvoteltavissa"],
+["neuvottelu","to close the deal","päättää kaupat, saada sopimus"],
+["neuvottelu","Let's summarize what we've agreed on","Tehdään yhteenveto sovituista asioista"],
+["neuvottelu","payment schedule","maksuaikataulu"],
+["neuvottelu","penalty clause","sanktioehto, viivästyssakkoehto"]
+];
+
+const CATS = {"Kaikki":null,"Yleissanasto":"yleinen","Sähkö ja talotekniikka":"sähkö","Työelämä":"työ","Elektroniikka ja IoT":"elektroniikka","Sähköpostifraasit":"sähköposti","Neuvottelu":"neuvottelu","Omat sanat":"omat"};
+let mode="flash", cat="Kaikki", dir="en";
+let progress={}, cur=null, flipped=false, locked=false, sess=0, score=0;
+let CUSTOM=[];
+
+try{ progress = JSON.parse(localStorage.getItem("eng-sanasto")) || {}; }catch(e){}
+try{ CUSTOM = JSON.parse(localStorage.getItem("eng-sanasto-omat")) || []; }catch(e){}
+function saveP(){ try{ localStorage.setItem("eng-sanasto", JSON.stringify(progress)); }catch(e){} }
+function saveC(){ try{ localStorage.setItem("eng-sanasto-omat", JSON.stringify(CUSTOM)); }catch(e){} }
+
+/* --- Ääntäminen: selaimen Web Speech API (ei vaadi nettiä eikä API-avainta) --- */
+const TTS = ("speechSynthesis" in window);
+let enVoice=null, autoSpeak=false;
+try{ autoSpeak = localStorage.getItem("eng-sanasto-auto")==="1"; }catch(e){}
+
+function loadVoices(){
+  if(!TTS) return;
+  const vs = speechSynthesis.getVoices();
+  enVoice = vs.find(v=>/^en[-_]?/i.test(v.lang) && /google|natural|premium|siri|enhanced/i.test(v.name))
+         || vs.find(v=>/^en[-_]?/i.test(v.lang))
+         || null;
+}
+if(TTS){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+
+function speak(text){
+  if(!TTS || !text) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang="en-US"; u.rate=0.9;
+  if(enVoice) u.voice=enVoice;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+function speakCurrent(){ if(cur) speak(cur[1]); }   // cur[1] = aina englanninkielinen sana
+
+function toggleAuto(){
+  autoSpeak=!autoSpeak;
+  try{ localStorage.setItem("eng-sanasto-auto", autoSpeak?"1":"0"); }catch(e){}
+  updateAutoBtn();
+  if(autoSpeak) speakCurrent();
+}
+function updateAutoBtn(){
+  const b=document.getElementById("autospeak");
+  if(!b) return;
+  b.textContent = "🔊 Automaattinen ääntäminen: "+(autoSpeak?"päällä":"pois");
+  b.classList.toggle("active", autoSpeak);
+  b.disabled = !TTS;
+  if(!TTS) b.textContent = "🔇 Selaimesi ei tue ääntämistä";
+}
+function key(w){ return w[1]; }
+function box(w){ return progress[key(w)] || 1; }
+function allWords(){ return WORDS.concat(CUSTOM); }
+
+function poolWords(){
+  const c=CATS[cat];
+  return allWords().filter(w=>!c||w[0]===c);
+}
+
+function pickWord(){
+  const pool=poolWords();
+  const weighted=[];
+  pool.forEach(w=>{
+    const b=box(w);
+    const n = b===1?4 : b===2?2 : 1;
+    for(let i=0;i<n;i++)weighted.push(w);
+  });
+  let w;
+  do{ w=weighted[Math.floor(Math.random()*weighted.length)]; }
+  while(cur && key(w)===key(cur) && pool.length>1);
+  return w;
+}
+
+function updateStats(){
+  const pool=poolWords();
+  let c1=0,c2=0,c3=0;
+  pool.forEach(w=>{const b=box(w); if(b===1)c1++; else if(b===2)c2++; else c3++;});
+  document.getElementById("c1").textContent=c1;
+  document.getElementById("c2").textContent=c2;
+  document.getElementById("c3").textContent=c3;
+  document.getElementById("mastered").textContent=c3;
+  document.getElementById("total").textContent=pool.length;
+  document.getElementById("sess").textContent=sess;
+  document.getElementById("score").textContent=score;
+}
+
+function front(w){ return dir==="en"? w[1] : w[2]; }
+function back(w){ return dir==="en"? w[2] : w[1]; }
+function frontLang(){ return dir==="en"?"Englanti":"Suomi"; }
+function backLang(){ return dir==="en"?"Suomi":"Englanti"; }
+
+function renderCard(){
+  if(poolWords().length===0){
+    document.getElementById("lang").textContent="";
+    document.getElementById("word").textContent="Tässä kategoriassa ei ole vielä sanoja";
+    document.getElementById("hint").style.display="block";
+    document.getElementById("hint").textContent="Lisää sanoja kääntäjän kautta: käännä sana ja paina 'Lisää omiin sanoihin'.";
+    document.getElementById("boxlabel").textContent="";
+    document.getElementById("opts").style.display="none";
+    document.getElementById("judge").style.display="none";
+    document.getElementById("nextBtn").style.display="none";
+    document.getElementById("speakBtn").style.display="none";
+    const fb=document.getElementById("fb"); fb.className="fb"; fb.innerHTML="";
+    updateStats();
+    return;
+  }
+  cur=pickWord(); flipped=false; locked=false;
+  document.getElementById("lang").textContent=frontLang();
+  document.getElementById("word").textContent=front(cur);
+  document.getElementById("speakBtn").style.display="inline-flex";
+  if(autoSpeak && dir==="en") speakCurrent();
+  const b=box(cur);
+  const bl=document.getElementById("boxlabel");
+  bl.textContent="Taso "+b+" / 3";
+  bl.style.color = b===1?"var(--wrong)": b===2?"var(--amber)":"var(--accent)";
+  const fb=document.getElementById("fb"); fb.className="fb"; fb.innerHTML="";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("judge").style.display="none";
+  const opts=document.getElementById("opts");
+  if(mode==="flash"){
+    opts.style.display="none";
+    document.getElementById("hint").style.display="block";
+    document.getElementById("card").style.cursor="pointer";
+  }else{
+    document.getElementById("hint").style.display="none";
+    document.getElementById("card").style.cursor="default";
+    renderOptions();
+  }
+  updateStats();
+}
+
+function flip(){
+  if(mode!=="flash"||flipped)return;
+  flipped=true;
+  document.getElementById("lang").textContent=backLang();
+  document.getElementById("word").textContent=back(cur);
+  document.getElementById("hint").style.display="none";
+  document.getElementById("judge").style.display="flex";
+  if(autoSpeak && dir==="fi") speakCurrent();
+}
+
+function judge(knew){
+  const k=key(cur);
+  let b=box(cur);
+  b = knew? Math.min(3,b+1) : 1;
+  progress[k]=b; saveP();
+  sess++; if(knew)score++;
+  renderCard();
+}
+
+function renderOptions(){
+  const opts=document.getElementById("opts");
+  opts.style.display="flex"; opts.innerHTML="";
+  let pool=poolWords().filter(w=>key(w)!==key(cur));
+  if(pool.length<3) pool=allWords().filter(w=>key(w)!==key(cur));
+  const distractors=[];
+  const shuffledPool=pool.slice().sort(()=>Math.random()-0.5);
+  for(const w of shuffledPool){ if(distractors.length<3)distractors.push(back(w)); }
+  const choices=[back(cur),...distractors].sort(()=>Math.random()-0.5);
+  choices.forEach(c=>{
+    const btn=document.createElement("button");
+    btn.textContent=c;
+    btn.onclick=()=>answerQuiz(c,btn);
+    opts.appendChild(btn);
+  });
+}
+
+function answerQuiz(choice,btn){
+  if(locked)return;
+  locked=true;
+  sess++;
+  const correct = choice===back(cur);
+  const buttons=document.getElementById("opts").children;
+  for(const b of buttons){
+    b.disabled=true;
+    if(b.textContent===back(cur))b.classList.add("correct");
+  }
+  const fb=document.getElementById("fb");
+  const k=key(cur);
+  let b=box(cur);
+  if(correct){
+    score++;
+    progress[k]=Math.min(3,b+1);
+    fb.className="fb ok";
+    fb.innerHTML="<strong>Oikein!</strong> "+cur[1]+" = "+cur[2];
+  }else{
+    btn.classList.add("wrong");
+    progress[k]=1;
+    fb.className="fb no";
+    fb.innerHTML="<strong>Ei ihan.</strong> "+cur[1]+" = "+cur[2];
+  }
+  saveP(); updateStats();
+  if(autoSpeak) speakCurrent();
+  document.getElementById("nextBtn").style.display="inline-block";
+}
+
+function nextCard(){ renderCard(); }
+
+function norm(s){ return s.toLowerCase().trim().replace(/\s+/g," "); }
+function fiParts(fi){ return fi.toLowerCase().split(/[,;/]/).map(s=>s.trim()).filter(Boolean); }
+
+function detectDir(q){
+  if(/[äöå]/i.test(q)) return "fi|en";
+  const lower=norm(q);
+  if(allWords().some(w=>fiParts(w[2]).includes(lower))) return "fi|en";
+  return "en|fi";
+}
+
+// Palauttaa osumat vahvuuden mukaan: 2 = täsmällinen sanaosuma, 1 = osittainen
+function localLookup(q){
+  const lower=norm(q);
+  const hits=[];
+  allWords().forEach(w=>{
+    const en=w[1].toLowerCase(), fi=w[2].toLowerCase();
+    let s=0;
+    if(en===lower || fiParts(w[2]).includes(lower)) s=2;
+    else if(en.includes(lower) || fi.includes(lower)) s=1;
+    if(s) hits.push({w:w, s:s});
+  });
+  hits.sort((a,b)=>b.s-a.s);
+  return hits;
+}
+
+// Ensisijaisesti Google-kääntäjä (Lingva) — selvästi parempi suomi kuin MyMemory
+const LINGVA_HOSTS=["lingva.ml","lingva.thedaviddelta.com"];
+async function lingvaTranslate(q,pair){
+  const p=pair.split("|"), src=p[0], tgt=p[1];
+  for(const h of LINGVA_HOSTS){
+    try{
+      const r=await fetch("https://"+h+"/api/v1/"+src+"/"+tgt+"/"+encodeURIComponent(q));
+      if(!r.ok) continue;
+      const d=await r.json();
+      if(d && d.translation && norm(d.translation)!==norm(q))
+        return {text:d.translation.trim(), alts:[], source:"Google-kääntäjä"};
+    }catch(e){}
+  }
+  return null;
+}
+
+// MyMemory-varakäännös: käydään ehdokkaat läpi ja suodatetaan roskat
+function parseMyMemory(d,q){
+  const seen=new Set(), out=[];
+  const add=t=>{ if(!t) return; const k=norm(t);
+    if(k && k!==norm(q) && !seen.has(k) && !/^(NO QUERY|INVALID|MYMEMORY WARNING|QUERY LENGTH)/i.test(t)){
+      seen.add(k); out.push(t.trim()); } };
+  if(Array.isArray(d.matches)){
+    d.matches.filter(m=>m && m.translation)
+      .sort((a,b)=>((b.match||0)-(a.match||0))||((parseFloat(b.quality)||0)-(parseFloat(a.quality)||0)))
+      .forEach(m=>add(m.translation));
+  }
+  if(d.responseData) add(d.responseData.translatedText);
+  return out;
+}
+async function mymemoryTranslate(q,pair){
+  try{
+    const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(q)+"&langpair="+encodeURIComponent(pair));
+    const d=await r.json();
+    const c=parseMyMemory(d,q);
+    if(c.length) return {text:c[0], alts:c.slice(1,3), source:"MyMemory-konekäännös"};
+  }catch(e){}
+  return null;
+}
+
+let lastTrans=null;
+
+async function translateWord(){
+  const q=document.getElementById("tin").value.trim();
+  const box=document.getElementById("tres");
+  lastTrans=null;
+  if(!q){ box.style.display="none"; return; }
+  box.style.display="block";
+
+  const hits=localLookup(q);
+  const exact=hits.filter(h=>h.s===2).map(h=>h.w);
+  const partial=hits.filter(h=>h.s===1).map(h=>h.w).slice(0,4);
+
+  // 1) Täsmällinen osuma sanapankista → luotettava, ei konekäännöstä
+  if(exact.length){
+    let html="<strong>Sanapankista (tarkistettu):</strong><br>";
+    exact.slice(0,4).forEach(w=>{ html+= w[1]+" = "+w[2]+"<br>"; });
+    box.innerHTML=html;
+    return;
+  }
+
+  // 2) Ei täsmäosumaa → näytä samankaltaiset ja hae käännös verkosta
+  let head="";
+  if(partial.length){
+    head="<strong>Samankaltaisia sanapankissa:</strong><br>";
+    partial.forEach(w=>{ head+= w[1]+" = "+w[2]+"<br>"; });
+    head+="<br>";
+  }
+
+  let pair=document.getElementById("tdir").value;
+  if(pair==="auto") pair=detectDir(q);
+  const dirLabel = pair==="en|fi" ? "EN → FI" : "FI → EN";
+
+  box.innerHTML=head+"<em>Haetaan käännöstä...</em>";
+
+  let res = await lingvaTranslate(q,pair);
+  if(!res) res = await mymemoryTranslate(q,pair);
+
+  let html=head;
+  if(res){
+    const en = pair==="en|fi" ? q : res.text;
+    const fi = pair==="en|fi" ? res.text : q;
+    lastTrans=["omat",en,fi];
+    html+="<strong>"+dirLabel+":</strong> "+q+" = "+res.text;
+    if(res.alts && res.alts.length)
+      html+='<p class="src">Muita vaihtoehtoja: '+res.alts.join(", ")+'</p>';
+    html+='<p class="src">Lähde: '+res.source+' — tarkista merkitys ennen käyttöä</p>';
+    html+='<button class="addbtn" onclick="addCustom()">+ Lisää omiin sanoihin</button>';
+  }else if(partial.length){
+    html+='<p class="src">Verkkokäännöstä ei saatu — yllä samankaltaiset sanapankista.</p>';
+  }else{
+    html+="Käännöstä ei löytynyt sanalle \""+q+"\" — tarkista kirjoitusasu tai internetyhteys.";
+  }
+  box.innerHTML=html;
+}
+
+function addCustom(){
+  if(!lastTrans) return;
+  const en=lastTrans[1].toLowerCase();
+  if(allWords().some(w=>w[1].toLowerCase()===en)){
+    document.getElementById("tres").innerHTML+="<p class='src'>Sana on jo sanapankissa.</p>";
+    return;
+  }
+  CUSTOM.push(lastTrans); saveC();
+  document.getElementById("tres").innerHTML+="<p class='src'>Lisätty kategoriaan Omat sanat ("+CUSTOM.length+" kpl). Sana on nyt mukana harjoituksissa.</p>";
+  lastTrans=null;
+  updateStats();
+}
+
+function clearCustom(){
+  if(CUSTOM.length===0){ alert("Omia sanoja ei ole vielä lisätty."); return; }
+  if(confirm("Poistetaanko kaikki "+CUSTOM.length+" omaa sanaa pysyvästi?")){
+    CUSTOM=[]; saveC(); renderCard();
+  }
+}
+
+function resetProgress(){
+  if(confirm("Nollataanko kaikkien sanojen oppimistaso pysyvästi?")){
+    progress={}; saveP(); renderCard();
+  }
+}
+
+function bindRow(id,attr,setter){
+  const el=document.getElementById(id);
+  for(const b of el.children){
+    b.onclick=()=>{
+      for(const x of el.children)x.classList.remove("active");
+      b.classList.add("active");
+      setter(b.dataset[attr]);
+      sess=0;score=0;
+      renderCard();
+    };
+  }
+}
+
+const catsEl=document.getElementById("cats");
+Object.keys(CATS).forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.textContent=c; b.dataset.c=c;
+  if(i===0)b.classList.add("active");
+  catsEl.appendChild(b);
+});
+bindRow("modes","m",v=>mode=v);
+bindRow("cats","c",v=>cat=v);
+bindRow("dirs","d",v=>dir=v);
+
+updateAutoBtn();
+renderCard();
+</script>
+</div>
+</body>
+</html>

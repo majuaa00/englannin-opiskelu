@@ -1,0 +1,712 @@
+[
+ [
+  "yleinen",
+  "improve",
+  "parantaa"
+ ],
+ [
+  "yleinen",
+  "achieve",
+  "saavuttaa"
+ ],
+ [
+  "yleinen",
+  "decide",
+  "päättää"
+ ],
+ [
+  "yleinen",
+  "although",
+  "vaikka"
+ ],
+ [
+  "yleinen",
+  "therefore",
+  "siksi, sen vuoksi"
+ ],
+ [
+  "yleinen",
+  "however",
+  "kuitenkin"
+ ],
+ [
+  "yleinen",
+  "despite",
+  "huolimatta"
+ ],
+ [
+  "yleinen",
+  "instead of",
+  "sen sijaan että"
+ ],
+ [
+  "yleinen",
+  "available",
+  "saatavilla"
+ ],
+ [
+  "yleinen",
+  "necessary",
+  "välttämätön"
+ ],
+ [
+  "yleinen",
+  "efficient",
+  "tehokas"
+ ],
+ [
+  "yleinen",
+  "reliable",
+  "luotettava"
+ ],
+ [
+  "yleinen",
+  "accurate",
+  "tarkka"
+ ],
+ [
+  "yleinen",
+  "approximately",
+  "noin, suunnilleen"
+ ],
+ [
+  "yleinen",
+  "increase",
+  "kasvaa, lisätä"
+ ],
+ [
+  "yleinen",
+  "decrease",
+  "vähentyä, vähentää"
+ ],
+ [
+  "yleinen",
+  "compare",
+  "vertailla"
+ ],
+ [
+  "yleinen",
+  "suggest",
+  "ehdottaa"
+ ],
+ [
+  "yleinen",
+  "require",
+  "vaatia, edellyttää"
+ ],
+ [
+  "yleinen",
+  "consider",
+  "harkita, ottaa huomioon"
+ ],
+ [
+  "yleinen",
+  "confirm",
+  "vahvistaa"
+ ],
+ [
+  "yleinen",
+  "postpone",
+  "lykätä, siirtää myöhemmäksi"
+ ],
+ [
+  "yleinen",
+  "convenient",
+  "kätevä, sopiva"
+ ],
+ [
+  "yleinen",
+  "sufficient",
+  "riittävä"
+ ],
+ [
+  "yleinen",
+  "purpose",
+  "tarkoitus"
+ ],
+ [
+  "sähkö",
+  "circuit breaker",
+  "johdonsuojakatkaisija"
+ ],
+ [
+  "sähkö",
+  "residual current device (RCD)",
+  "vikavirtasuojakytkin"
+ ],
+ [
+  "sähkö",
+  "arc fault detection device (AFDD)",
+  "valokaarivikasuoja"
+ ],
+ [
+  "sähkö",
+  "distribution board",
+  "sähkökeskus, ryhmäkeskus"
+ ],
+ [
+  "sähkö",
+  "main switchboard",
+  "pääkeskus"
+ ],
+ [
+  "sähkö",
+  "voltage",
+  "jännite"
+ ],
+ [
+  "sähkö",
+  "current",
+  "virta"
+ ],
+ [
+  "sähkö",
+  "power",
+  "teho"
+ ],
+ [
+  "sähkö",
+  "earthing / grounding",
+  "maadoitus"
+ ],
+ [
+  "sähkö",
+  "fuse",
+  "sulake"
+ ],
+ [
+  "sähkö",
+  "wiring",
+  "johdotus"
+ ],
+ [
+  "sähkö",
+  "cable tray",
+  "kaapelihylly"
+ ],
+ [
+  "sähkö",
+  "conduit",
+  "asennusputki"
+ ],
+ [
+  "sähkö",
+  "riser diagram",
+  "nousujohtokaavio"
+ ],
+ [
+  "sähkö",
+  "load management",
+  "kuormanhallinta"
+ ],
+ [
+  "sähkö",
+  "charging station",
+  "latausasema"
+ ],
+ [
+  "sähkö",
+  "power quality",
+  "sähkön laatu"
+ ],
+ [
+  "sähkö",
+  "three-phase",
+  "kolmivaihe-"
+ ],
+ [
+  "sähkö",
+  "ventilation",
+  "ilmanvaihto"
+ ],
+ [
+  "sähkö",
+  "heat pump",
+  "lämpöpumppu"
+ ],
+ [
+  "sähkö",
+  "district heating",
+  "kaukolämpö"
+ ],
+ [
+  "sähkö",
+  "building automation",
+  "rakennusautomaatio"
+ ],
+ [
+  "sähkö",
+  "fault",
+  "vika, häiriö"
+ ],
+ [
+  "sähkö",
+  "measurement",
+  "mittaus"
+ ],
+ [
+  "sähkö",
+  "commissioning",
+  "käyttöönotto"
+ ],
+ [
+  "sähkö",
+  "maintenance",
+  "huolto, kunnossapito"
+ ],
+ [
+  "sähkö",
+  "preventive maintenance",
+  "ennakkohuolto"
+ ],
+ [
+  "sähkö",
+  "insulation",
+  "eristys"
+ ],
+ [
+  "sähkö",
+  "enclosure",
+  "kotelo"
+ ],
+ [
+  "sähkö",
+  "terminal",
+  "liitin"
+ ],
+ [
+  "työ",
+  "quotation / offer",
+  "tarjous"
+ ],
+ [
+  "työ",
+  "invoice",
+  "lasku"
+ ],
+ [
+  "työ",
+  "procurement",
+  "hankinta"
+ ],
+ [
+  "työ",
+  "agreement / contract",
+  "sopimus"
+ ],
+ [
+  "työ",
+  "deadline",
+  "määräaika"
+ ],
+ [
+  "työ",
+  "schedule",
+  "aikataulu"
+ ],
+ [
+  "työ",
+  "estimate",
+  "kustannusarvio, arvio"
+ ],
+ [
+  "työ",
+  "warranty",
+  "takuu"
+ ],
+ [
+  "työ",
+  "subcontractor",
+  "aliurakoitsija"
+ ],
+ [
+  "työ",
+  "construction site",
+  "työmaa"
+ ],
+ [
+  "työ",
+  "client / customer",
+  "asiakas"
+ ],
+ [
+  "työ",
+  "negotiate",
+  "neuvotella"
+ ],
+ [
+  "työ",
+  "meeting minutes",
+  "kokousmuistio, pöytäkirja"
+ ],
+ [
+  "työ",
+  "attachment",
+  "liite"
+ ],
+ [
+  "työ",
+  "proposal",
+  "ehdotus, tarjousehdotus"
+ ],
+ [
+  "työ",
+  "budget",
+  "budjetti"
+ ],
+ [
+  "työ",
+  "cost-effective",
+  "kustannustehokas"
+ ],
+ [
+  "työ",
+  "scope of work",
+  "työn laajuus"
+ ],
+ [
+  "työ",
+  "delivery time",
+  "toimitusaika"
+ ],
+ [
+  "työ",
+  "terms of payment",
+  "maksuehdot"
+ ],
+ [
+  "työ",
+  "site visit",
+  "työmaakäynti, kohdekäynti"
+ ],
+ [
+  "työ",
+  "key account manager",
+  "avainasiakaspäällikkö"
+ ],
+ [
+  "työ",
+  "housing company",
+  "taloyhtiö, asunto-osakeyhtiö"
+ ],
+ [
+  "työ",
+  "property manager",
+  "isännöitsijä"
+ ],
+ [
+  "työ",
+  "tender",
+  "tarjouskilpailu"
+ ],
+ [
+  "elektroniikka",
+  "sensor",
+  "anturi"
+ ],
+ [
+  "elektroniikka",
+  "resistor",
+  "vastus"
+ ],
+ [
+  "elektroniikka",
+  "capacitor",
+  "kondensaattori"
+ ],
+ [
+  "elektroniikka",
+  "soldering",
+  "juottaminen"
+ ],
+ [
+  "elektroniikka",
+  "soldering iron",
+  "juotoskolvi"
+ ],
+ [
+  "elektroniikka",
+  "power supply",
+  "virtalähde"
+ ],
+ [
+  "elektroniikka",
+  "microcontroller",
+  "mikro-ohjain"
+ ],
+ [
+  "elektroniikka",
+  "firmware",
+  "laiteohjelmisto"
+ ],
+ [
+  "elektroniikka",
+  "oscilloscope",
+  "oskilloskooppi"
+ ],
+ [
+  "elektroniikka",
+  "multimeter",
+  "yleismittari"
+ ],
+ [
+  "elektroniikka",
+  "wireless",
+  "langaton"
+ ],
+ [
+  "elektroniikka",
+  "circuit board (PCB)",
+  "piirilevy"
+ ],
+ [
+  "elektroniikka",
+  "breadboard",
+  "koekytkentälevy"
+ ],
+ [
+  "elektroniikka",
+  "datasheet",
+  "datalehti"
+ ],
+ [
+  "elektroniikka",
+  "troubleshooting",
+  "vianetsintä"
+ ],
+ [
+  "elektroniikka",
+  "spare part",
+  "varaosa"
+ ],
+ [
+  "elektroniikka",
+  "enclosure rating (IP)",
+  "kotelointiluokka"
+ ],
+ [
+  "elektroniikka",
+  "current consumption",
+  "virrankulutus"
+ ],
+ [
+  "elektroniikka",
+  "update / upgrade",
+  "päivitys / laitepäivitys"
+ ],
+ [
+  "elektroniikka",
+  "measurement range",
+  "mittausalue"
+ ],
+ [
+  "sähköposti",
+  "I am writing to inquire about...",
+  "Kirjoitan tiedustellakseni..."
+ ],
+ [
+  "sähköposti",
+  "Please find attached...",
+  "Liitteenä on... / Ohessa..."
+ ],
+ [
+  "sähköposti",
+  "With reference to your email...",
+  "Viitaten sähköpostiinne..."
+ ],
+ [
+  "sähköposti",
+  "Could you please confirm...",
+  "Voisitteko vahvistaa..."
+ ],
+ [
+  "sähköposti",
+  "I would appreciate it if you could...",
+  "Olisin kiitollinen, jos voisitte..."
+ ],
+ [
+  "sähköposti",
+  "Thank you for your prompt reply",
+  "Kiitos nopeasta vastauksestanne"
+ ],
+ [
+  "sähköposti",
+  "I apologize for the delay in responding",
+  "Pahoittelen viivästynyttä vastausta"
+ ],
+ [
+  "sähköposti",
+  "As discussed in our meeting...",
+  "Kuten kokouksessamme sovimme..."
+ ],
+ [
+  "sähköposti",
+  "Please let me know if you have any questions",
+  "Kerrottehan, jos teillä on kysyttävää"
+ ],
+ [
+  "sähköposti",
+  "I look forward to hearing from you",
+  "Odotan vastaustanne"
+ ],
+ [
+  "sähköposti",
+  "Could we schedule a meeting to discuss this?",
+  "Voisimmeko sopia tapaamisen tästä?"
+ ],
+ [
+  "sähköposti",
+  "I am following up on my previous email",
+  "Palaan aiempaan sähköpostiini"
+ ],
+ [
+  "sähköposti",
+  "Please do not hesitate to contact me",
+  "Otattehan rohkeasti yhteyttä"
+ ],
+ [
+  "sähköposti",
+  "We regret to inform you that...",
+  "Joudumme valitettavasti ilmoittamaan, että..."
+ ],
+ [
+  "sähköposti",
+  "We are pleased to inform you that...",
+  "Ilomme on ilmoittaa, että..."
+ ],
+ [
+  "sähköposti",
+  "Further to our phone conversation...",
+  "Puhelinkeskusteluumme viitaten..."
+ ],
+ [
+  "sähköposti",
+  "Please find our quotation enclosed",
+  "Ohessa tarjouksemme"
+ ],
+ [
+  "sähköposti",
+  "The deadline for submission is...",
+  "Viimeinen jättöpäivä on..."
+ ],
+ [
+  "sähköposti",
+  "Best regards / Kind regards",
+  "Ystävällisin terveisin"
+ ],
+ [
+  "sähköposti",
+  "on behalf of",
+  "jonkun puolesta (esim. yrityksen)"
+ ],
+ [
+  "neuvottelu",
+  "Let's get down to business",
+  "Mennään asiaan"
+ ],
+ [
+  "neuvottelu",
+  "What did you have in mind?",
+  "Mitä teillä oli mielessä?"
+ ],
+ [
+  "neuvottelu",
+  "We could offer you...",
+  "Voisimme tarjota teille..."
+ ],
+ [
+  "neuvottelu",
+  "That's not quite what we expected",
+  "Tämä ei aivan vastaa odotuksiamme"
+ ],
+ [
+  "neuvottelu",
+  "Could you be more flexible on the price?",
+  "Voisitteko joustaa hinnassa?"
+ ],
+ [
+  "neuvottelu",
+  "Let me get back to you on that",
+  "Palaan tähän asiaan myöhemmin"
+ ],
+ [
+  "neuvottelu",
+  "We're on the same page",
+  "Olemme samoilla linjoilla"
+ ],
+ [
+  "neuvottelu",
+  "to reach an agreement",
+  "päästä sopimukseen"
+ ],
+ [
+  "neuvottelu",
+  "counteroffer",
+  "vastatarjous"
+ ],
+ [
+  "neuvottelu",
+  "to compromise",
+  "tehdä kompromissi, joustaa"
+ ],
+ [
+  "neuvottelu",
+  "terms and conditions",
+  "sopimusehdot"
+ ],
+ [
+  "neuvottelu",
+  "a win-win situation",
+  "molempia hyödyttävä tilanne"
+ ],
+ [
+  "neuvottelu",
+  "That works for us",
+  "Tämä sopii meille"
+ ],
+ [
+  "neuvottelu",
+  "I'm afraid we can't accept that",
+  "Valitettavasti emme voi hyväksyä tätä"
+ ],
+ [
+  "neuvottelu",
+  "What if we...?",
+  "Entä jos me...?"
+ ],
+ [
+  "neuvottelu",
+  "to meet halfway",
+  "tulla puolitiehen vastaan"
+ ],
+ [
+  "neuvottelu",
+  "subject to approval",
+  "hyväksynnän varainen, edellyttäen hyväksyntää"
+ ],
+ [
+  "neuvottelu",
+  "non-negotiable",
+  "ei neuvoteltavissa"
+ ],
+ [
+  "neuvottelu",
+  "to close the deal",
+  "päättää kaupat, saada sopimus"
+ ],
+ [
+  "neuvottelu",
+  "Let's summarize what we've agreed on",
+  "Tehdään yhteenveto sovituista asioista"
+ ],
+ [
+  "neuvottelu",
+  "payment schedule",
+  "maksuaikataulu"
+ ],
+ [
+  "neuvottelu",
+  "penalty clause",
+  "sanktioehto, viivästyssakkoehto"
+ ]
+]
