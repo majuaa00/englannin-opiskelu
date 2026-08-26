@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Englannin lauserakenteet ja aikamuodot — harjoitusohjelma</title>
+<style>
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#22301f; --muted:#6b7566;
+  --line:#dcdad2; --accent:#1d6e4e; --accent-soft:#e2f0e8;
+  --wrong:#a33030; --wrong-soft:#f8e7e7; --radius:10px;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif; line-height:1.6;}
+.wrap{max-width:720px; margin:0 auto; padding:2rem 1.25rem 4rem;}
+header{border-bottom:3px double var(--line); padding-bottom:1.25rem; margin-bottom:1.5rem;}
+h1{font-size:1.6rem; font-weight:normal; margin:0 0 0.25rem; letter-spacing:0.01em;}
+.sub{font-family:Verdana,sans-serif; font-size:0.8rem; color:var(--muted); margin:0;}
+.cats{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 1.25rem;}
+.cats button{font-family:Verdana,sans-serif; font-size:0.75rem; padding:7px 14px;
+  border:1px solid var(--line); background:var(--card); color:var(--ink);
+  border-radius:20px; cursor:pointer;}
+.cats button.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 1.5rem;}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:0.6rem 0.9rem;}
+.stat p{margin:0; font-family:Verdana,sans-serif;}
+.stat .l{font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted);}
+.stat .v{font-size:1.4rem;}
+.qcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:1.5rem;}
+.qcat{font-family:Verdana,sans-serif; font-size:0.7rem; text-transform:uppercase;
+  letter-spacing:0.1em; color:var(--accent); margin:0 0 0.5rem;}
+.qtext{font-size:1.2rem; margin:0 0 1.25rem;}
+.opts{display:flex; flex-direction:column; gap:9px;}
+.opts button{font-family:Georgia,serif; font-size:1rem; text-align:left; padding:11px 16px;
+  border:1px solid var(--line); background:var(--bg); color:var(--ink);
+  border-radius:var(--radius); cursor:pointer; transition:border-color .15s;}
+.opts button:hover:not(:disabled){border-color:var(--accent);}
+.opts button:disabled{cursor:default;}
+.opts button.correct{background:var(--accent-soft); border-color:var(--accent); color:var(--accent);}
+.opts button.wrong{background:var(--wrong-soft); border-color:var(--wrong); color:var(--wrong);}
+.fb{display:none; margin-top:1.25rem; padding:0.9rem 1.1rem; border-radius:var(--radius);
+  font-size:0.95rem; border-left:4px solid;}
+.fb.ok{display:block; background:var(--accent-soft); border-color:var(--accent); color:#14523a;}
+.fb.no{display:block; background:var(--wrong-soft); border-color:var(--wrong); color:#7c2222;}
+.foot{display:flex; justify-content:space-between; align-items:center; margin-top:1.25rem;}
+.counter{font-family:Verdana,sans-serif; font-size:0.75rem; color:var(--muted);}
+.next,.reset{font-family:Verdana,sans-serif; font-size:0.8rem; padding:9px 18px;
+  border:1px solid var(--accent); background:var(--accent); color:#fff;
+  border-radius:var(--radius); cursor:pointer;}
+.next{display:none;}
+.reset{background:transparent; color:var(--accent); margin-top:1.25rem;}
+.history{margin-top:2rem; font-family:Verdana,sans-serif; font-size:0.75rem; color:var(--muted);}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Englannin lauserakenteet ja aikamuodot</h1>
+  <p class="sub">Harjoitusohjelma · osa 12 kk kehittymisohjelmaa · edistyminen tallentuu selaimeen</p>
+</header>
+
+<div class="cats" id="cats"></div>
+
+<div class="stats">
+  <div class="stat"><p class="l">Oikein</p><p class="v" id="score">0</p></div>
+  <div class="stat"><p class="l">Vastattu</p><p class="v" id="answered">0</p></div>
+  <div class="stat"><p class="l">Putki</p><p class="v" id="streak">0</p></div>
+  <div class="stat"><p class="l">Kaikki aikana</p><p class="v" id="total">0</p></div>
+</div>
+
+<div class="qcard">
+  <p class="qcat" id="qcat"></p>
+  <p class="qtext" id="qtext"></p>
+  <div class="opts" id="opts"></div>
+  <div class="fb" id="fb"></div>
+  <div class="foot">
+    <span class="counter" id="counter"></span>
+    <button class="next" id="nextBtn">Seuraava →</button>
+  </div>
+</div>
+
+<button class="reset" onclick="resetSession()">Aloita istunto alusta</button>
+<button class="reset" onclick="resetAllTime()">Nollaa kokonaistilastot</button>
+
+<p class="history" id="hist"></p>
+
+<script>
+const QS = [
+{c:"Aikamuodot",q:"She ___ to work by bus every day.",o:["goes","is going","has gone","went"],a:0,e:"Toistuva tapa → present simple. Vihjesana 'every day'. Huomaa yksikön 3. persoonan -s: she goes."},
+{c:"Aikamuodot",q:"Look! It ___ outside.",o:["snows","is snowing","has snowed","snowed"],a:1,e:"Juuri nyt tapahtuva → present continuous (is/are + -ing). 'Look!' kertoo, että asia tapahtuu puhehetkellä."},
+{c:"Aikamuodot",q:"I ___ this movie three times already.",o:["saw","see","have seen","am seeing"],a:2,e:"Kokemus tähän mennessä, aika ei ole tarkka → present perfect (have/has + 3. muoto). Vihjesana 'already'."},
+{c:"Aikamuodot",q:"We ___ in Tampere from 2010 to 2015.",o:["have lived","lived","live","are living"],a:1,e:"Päättynyt ajanjakso menneisyydessä (2010–2015) → past simple. Perfektiä ei käytetä, kun aika on tarkasti rajattu ja ohi."},
+{c:"Aikamuodot",q:"When I arrived, they ___ dinner.",o:["ate","were eating","have eaten","eat"],a:1,e:"Taustalla kesken ollut tekeminen → past continuous (was/were + -ing). Saapuminen keskeytti syömisen."},
+{c:"Aikamuodot",q:"By the time we got there, the train ___.",o:["left","has left","had left","was leaving"],a:2,e:"Tapahtui ennen toista mennyttä tapahtumaa → past perfect (had + 3. muoto). Juna lähti ensin, me saavuimme sen jälkeen."},
+{c:"Aikamuodot",q:"I promise I ___ you tomorrow.",o:["call","will call","am calling","have called"],a:1,e:"Lupaus tai päätös puhehetkellä → will-futuuri. Lupaukset, tarjoukset ja spontaanit päätökset ilmaistaan will-muodolla."},
+{c:"Aikamuodot",q:"We ___ to Spain next week. The tickets are booked.",o:["will go","are going","go","have gone"],a:1,e:"Sovittu suunnitelma → present continuous futuurimerkityksessä. Kun järjestelyt on jo tehty, käytetään be + -ing."},
+{c:"Aikamuodot",q:"How long ___ you ___ English?",o:["do / study","are / studying","have / been studying","did / study"],a:2,e:"Menneisyydessä alkanut, yhä jatkuva tekeminen → present perfect continuous (have been + -ing). 'How long' viittaa kestoon nykyhetkeen asti."},
+{c:"Aikamuodot",q:"Water ___ at 100 degrees Celsius.",o:["is boiling","boils","has boiled","boiled"],a:1,e:"Yleinen totuus tai luonnonlaki → present simple. Faktat eivät sido tiettyyn hetkeen."},
+{c:"Aikamuodot",q:"He ___ his keys. He can't get in.",o:["lost","has lost","loses","was losing"],a:1,e:"Mennyt tapahtuma, jonka seuraus näkyy nyt → present perfect. Avaimet ovat edelleen hukassa, siksi ei past simple."},
+{c:"Aikamuodot",q:"This time tomorrow, I ___ on the beach.",o:["will lie","will be lying","am lying","lie"],a:1,e:"Tiettynä hetkenä tulevaisuudessa kesken oleva tekeminen → future continuous (will be + -ing)."},
+{c:"Aikamuodot",q:"Sorry, I can't talk now. I ___ a customer meeting.",o:["prepare","am preparing","have prepared","prepared"],a:1,e:"Puhehetkellä käynnissä oleva tekeminen → present continuous: I am preparing."},
+{c:"Aikamuodot",q:"The installation ___ before the inspection last week.",o:["was completed","has been completed","is completed","completes"],a:0,e:"Passiivi menneessä ajassa, tarkka ajankohta ('last week') → past simple passive: was completed."},
+{c:"Aikamuodot",q:"I ___ for this company since 2019.",o:["work","am working","have worked","worked"],a:2,e:"'Since' + alkamishetki → present perfect: työsuhde alkoi 2019 ja jatkuu yhä. Myös 'have been working' kävisi."},
+{c:"Sanajärjestys",q:"Valitse oikea sanajärjestys:",o:["She speaks very well English.","She speaks English very well.","She very well speaks English.","English she speaks very well."],a:1,e:"Perusjärjestys: subjekti + verbi + objekti + tapa (SVO + adverbi). Tavan adverbi ei mene verbin ja objektin väliin."},
+{c:"Sanajärjestys",q:"Valitse oikea lause:",o:["I like very much coffee.","I very much like coffee.","I like coffee very much.","Very much I like coffee."],a:2,e:"Määrän/tavan ilmaus tulee objektin jälkeen: like + coffee + very much. Suomen sanajärjestys johtaa usein harhaan tässä."},
+{c:"Sanajärjestys",q:"Valitse oikea lause:",o:["Always she is late.","She always is late.","She is always late.","She is late always."],a:2,e:"Frekvenssiadverbi (always, often, never...) tulee be-verbin JÄLKEEN mutta muiden verbien ETEEN: she is always late, mutta she always comes late."},
+{c:"Sanajärjestys",q:"Valitse oikea lause:",o:["He never has seen snow.","He has never seen snow.","Never he has seen snow.","He has seen never snow."],a:1,e:"Perfektissä frekvenssiadverbi sijoittuu apuverbin (has) ja pääverbin (seen) väliin: has never seen."},
+{c:"Sanajärjestys",q:"Valitse oikea järjestys: paikka ja aika",o:["I was yesterday at home.","I was at home yesterday.","Yesterday I was home at.","I yesterday was at home."],a:1,e:"Järjestys lauseen lopussa: paikka ennen aikaa: at home + yesterday. Ajan ilmaus voi myös aloittaa lauseen: 'Yesterday I was at home.'"},
+{c:"Sanajärjestys",q:"Valitse oikea adjektiivijärjestys:",o:["a red big car","a big red car","a car big red","a red car big"],a:1,e:"Adjektiivijärjestys: koko ennen väriä (opinion–size–age–shape–color–origin–material). Siksi big red car."},
+{c:"Sanajärjestys",q:"Valitse oikea epäsuora kysymys:",o:["Do you know where is the station?","Do you know where the station is?","Do you know where does the station is?","Know you where the station is?"],a:1,e:"Epäsuorassa kysymyksessä sanajärjestys on suora (subjekti + verbi): where the station is."},
+{c:"Sanajärjestys",q:"Valitse oikea lause:",o:["Can you tell me what time is it?","Can you tell me what time it is?","Can you tell me what is it time?","Can you tell what time is?"],a:1,e:"Epäsuora kysymys: what time it is (suora sanajärjestys). 'What time is it?' toimii vain itsenäisenä kysymyksenä."},
+{c:"Kysymys ja kielto",q:"___ she work at Caverion?",o:["Do","Does","Is","Has"],a:1,e:"Present simple -kysymys yksikön 3. persoonassa → does. Pääverbi jää perusmuotoon: Does she work, ei Does she works."},
+{c:"Kysymys ja kielto",q:"They ___ finish the project yesterday.",o:["don't","doesn't","didn't","haven't"],a:2,e:"Past simple -kielto → didn't + perusmuoto. Vihjesana 'yesterday'. Huomaa: didn't finish, ei didn't finished."},
+{c:"Kysymys ja kielto",q:"___ you ever been to London?",o:["Did","Do","Have","Are"],a:2,e:"Kokemuskysymys → present perfect: Have you ever been...? 'Ever' on tyypillinen perfektin vihjesana kysymyksissä."},
+{c:"Kysymys ja kielto",q:"What ___ at the moment?",o:["do you do","are you doing","have you done","did you do"],a:1,e:"'At the moment' = juuri nyt → present continuous. Vertaa: What do you do? kysyy ammattia, What are you doing? kysyy mitä teet nyt."},
+{c:"Kysymys ja kielto",q:"She doesn't ___ coffee.",o:["likes","like","liked","liking"],a:1,e:"Kiellon jälkeen pääverbi on aina perusmuodossa: doesn't like. Apuverbi does kantaa jo persoonan ja aikamuodon."},
+{c:"Kysymys ja kielto",q:"Valitse oikea liitekysymys: You're from Finland, ___?",o:["are you","aren't you","don't you","isn't it"],a:1,e:"Liitekysymys (tag question): myönteinen lause + kielteinen häntä samalla apuverbillä. You're → aren't you."},
+{c:"Kysymys ja kielto",q:"Why ___ he answer the email?",o:["didn't","doesn't he","don't","wasn't"],a:0,e:"Kysymyssana + apuverbi + subjekti + perusmuoto: Why didn't he answer. Konteksti viittaa menneeseen."},
+{c:"Konditionaalit",q:"If it rains, we ___ at home.",o:["stayed","will stay","would stay","stay will"],a:1,e:"1. konditionaali (todennäköinen tilanne): If + present simple, will + perusmuoto."},
+{c:"Konditionaalit",q:"If I ___ rich, I would buy a boat.",o:["am","was","were","will be"],a:2,e:"2. konditionaali (kuviteltu tilanne): If + past simple, would + perusmuoto. Be-verbistä 'were' kaikissa persoonissa."},
+{c:"Konditionaalit",q:"If you ___ me, I would have helped you.",o:["asked","had asked","would ask","ask"],a:1,e:"3. konditionaali (mennyt, toteutumaton tilanne): If + past perfect, would have + 3. muoto."},
+{c:"Konditionaalit",q:"When you heat ice, it ___.",o:["melts","will melt","would melt","melted"],a:0,e:"0. konditionaali (aina tosi asia): If/When + present simple, present simple. Luonnonlait ja yleiset totuudet."},
+{c:"Konditionaalit",q:"I ___ the job if I were you.",o:["take","will take","would take","took"],a:2,e:"2. konditionaali: 'if I were you' on vakiintunut neuvon antamisen rakenne → would + perusmuoto."},
+{c:"Konditionaalit",q:"Unless you hurry, you ___ the bus.",o:["missed","will miss","would miss","miss will"],a:1,e:"'Unless' = if not, ja rakenne toimii kuten 1. konditionaali: Unless + present simple, will + perusmuoto."}
+];
+
+const cats=["Kaikki","Aikamuodot","Sanajärjestys","Kysymys ja kielto","Konditionaalit"];
+let filter="Kaikki", pool=[], idx=0, score=0, answered=0, streak=0, locked=false;
+let alltime = {answered:0, correct:0};
+try{ alltime = JSON.parse(localStorage.getItem("eng-harjoittelu")) || alltime; }catch(e){}
+
+function saveAll(){ try{ localStorage.setItem("eng-harjoittelu", JSON.stringify(alltime)); }catch(e){} }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function buildPool(){ pool=shuffle(QS.filter(q=>filter==="Kaikki"||q.c===filter).slice()); idx=0; }
+
+function renderCats(){
+  const el=document.getElementById("cats"); el.innerHTML="";
+  cats.forEach(c=>{
+    const b=document.createElement("button");
+    b.textContent=c;
+    if(c===filter)b.classList.add("active");
+    b.onclick=()=>{filter=c;buildPool();renderCats();renderQ();};
+    el.appendChild(b);
+  });
+}
+
+function updateStats(){
+  document.getElementById("score").textContent=score;
+  document.getElementById("answered").textContent=answered;
+  document.getElementById("streak").textContent=streak;
+  document.getElementById("total").textContent=alltime.answered;
+  const pct = alltime.answered ? Math.round(100*alltime.correct/alltime.answered) : 0;
+  document.getElementById("hist").textContent =
+    "Kokonaistilasto: " + alltime.correct + " / " + alltime.answered + " oikein (" + pct + " %). Tilasto säilyy tässä selaimessa.";
+}
+
+function renderQ(){
+  locked=false;
+  const q=pool[idx];
+  document.getElementById("qcat").textContent=q.c;
+  document.getElementById("qtext").textContent=q.q;
+  document.getElementById("counter").textContent="Kysymys "+(idx+1)+" / "+pool.length;
+  const fb=document.getElementById("fb"); fb.className="fb"; fb.innerHTML="";
+  document.getElementById("nextBtn").style.display="none";
+  const opts=document.getElementById("opts"); opts.innerHTML="";
+  q.o.forEach((o,i)=>{
+    const b=document.createElement("button");
+    b.textContent=o;
+    b.onclick=()=>answer(i,b);
+    opts.appendChild(b);
+  });
+}
+
+function answer(i,btn){
+  if(locked)return;
+  locked=true;
+  const q=pool[idx];
+  answered++; alltime.answered++;
+  const fb=document.getElementById("fb");
+  const buttons=document.getElementById("opts").children;
+  for(const b of buttons)b.disabled=true;
+  buttons[q.a].classList.add("correct");
+  if(i===q.a){
+    score++; streak++; alltime.correct++;
+    fb.className="fb ok";
+    fb.innerHTML="<strong>Oikein!</strong> "+q.e;
+  }else{
+    streak=0;
+    btn.classList.add("wrong");
+    fb.className="fb no";
+    fb.innerHTML="<strong>Ei ihan.</strong> Oikea vastaus: <em>"+q.o[q.a]+"</em>. "+q.e;
+  }
+  saveAll(); updateStats();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.onclick=()=>{ idx++; if(idx>=pool.length)buildPool(); renderQ(); };
+}
+
+function resetSession(){ score=0;answered=0;streak=0; buildPool(); renderQ(); updateStats(); }
+function resetAllTime(){
+  if(confirm("Nollataanko kokonaistilastot pysyvästi?")){ alltime={answered:0,correct:0}; saveAll(); updateStats(); }
+}
+
+buildPool(); renderCats(); renderQ(); updateStats();
+</script>
+</div>
+</body>
+</html>
